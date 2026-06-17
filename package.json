@@ -1,0 +1,23 @@
+{
+  "name": "testes-abm",
+  "version": "1.0.0",
+  "description": "Testes do Projeto principal - Allan, Bianca e (Maykon?)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alanzouka/Testes-ABM.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alanzouka/Testes-ABM/issues"
+  },
+  "homepage": "https://github.com/Alanzouka/Testes-ABM#readme",
+  "dependencies": {
+    "nodemailer": "^9.0.1"
+  }
+}
