@@ -1,7 +1,7 @@
 const database = {
     listaEmails: [
-        { emails: 'coffeecuteowo@gmail.com', id: 1, name: 'Allan' },
-        {emails: 'semata654321@gmail.com', id: 2, name: 'Semata'},
+        { emails: 'semata654321@gmail.com', id: 1, name: 'Allanzito' },
+        {emails: 'biancamoreirap25@gmail.com', id: 2, name: 'Bianquinha'},
     ]
 }
 

@@ -29,4 +29,3 @@ listaEmails.forEach(emailDestinatario => {
 
 });
 
-html: ''
