@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Feedback</title>
+</head>
+<body>
+
+    <textarea id="mensagem" rows="4" cols="40" placeholder="escreve aí"></textarea>
+    <br>
+    <button onclick="enviarFeedback()">Aperta aí</button>
+    <p id="status"></p>
+
+    <script>
+        function enviarFeedback() {
+            const mensagem = document.getElementById('mensagem').value;
+            const status = document.getElementById('status');
+
+            if (!mensagem.trim()) {
+                status.textContent = 'Escreve alguma coisa primeiro!';
+                return;
+            }
+
+            // userId 1 = simula o usuário logado (Allanzito)
+            // troca por 2 pra testar com a Bianquinha
+            fetch('/feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: 1, mensagem: mensagem })
+            })
+            .then(res => res.json())
+            .then(data => {
+                status.textContent = data.ok ? '✅ Feedback enviado!' : '❌ Erro ao enviar.';
+            })
+            .catch(() => {
+                status.textContent = '❌ Não conseguiu conectar no servidor.';
+            });
+        }
+    </script>
+
+</body>
+</html>
