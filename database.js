@@ -1,8 +1,8 @@
 const database = {
-    email_logados: {
-        emails: 'bianca.pereira.moreira@escola.pr.gov.br',
-        emails: 'semata654321@gmail.com',
-    }
+    listaEmails: [
+        { emails: 'coffeecuteowo@gmail.com', id: 1, name: 'Allan' },
+        {emails: 'semata654321@gmail.com', id: 2, name: 'Semata'},
+    ]
 }
 
 module.exports = database;
