@@ -16,13 +16,13 @@ const form = document.getElementById('formAviso');
         form.reset(); // limpa o campo depois de enviar
 
         fetch('/publicar-aviso', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-        })
-        .then(res => res.json())
-        .then(data => {
-            if(data.ok) console.log('Email enviado com sucesso!!!!');
-        })
-        .catch(err => console.error('Erro ao notificar por email.', err));
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+})
+.then(res => res.json())
+.then(data => {
+if (data.ok) console.log('Emails enviados com sucesso!');
+})
+.catch(err => console.error('Erro ao notificar por email:', err));
 
     });
