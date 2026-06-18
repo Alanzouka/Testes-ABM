@@ -5,64 +5,36 @@ const db = require('./database.js');
  
 const app = express();
 app.use(express.json());
- 
-// Serve o HTML da sua amiga
 app.use(express.static(path.join(__dirname)));
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'bi.html'));
-});
  
-// ─── Configuração do email ─────────────────────────────────────────────────────
 const transport = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'lulaticospedagogia@gmail.com',
-        pass: 'senhasenha',
+        pass: 'dnwofjipjgkzmini',
     }
 });
  
-const EMAIL_SUPORTE = 'lulaticospedagogia@gmail.com';
+// Rota chamada quando o aviso é publicado
+app.post('/publicar-aviso', (req, res) => {
+    const listaEmails = db.listaEmails.map(u => u.emails);
  
-// ─── Rota que recebe o feedback do front ──────────────────────────────────────
-app.post('/feedback', (req, res) => {
-    const { userId, mensagem } = req.body;
- 
-    const usuarioLogado = db.listaEmails.find(u => u.id === userId);
- 
-    if (!usuarioLogado) {
-        return res.json({ ok: false, erro: 'Usuário não encontrado.' });
-    }
- 
-    if (!mensagem || mensagem.trim() === '') {
-        return res.json({ ok: false, erro: 'Mensagem vazia.' });
-    }
- 
-    transport.sendMail({
-        from: 'Lulaticos App <lulaticospedagogia@gmail.com>',
-        to: EMAIL_SUPORTE,
-        subject: `Novo Feedback de ${usuarioLogado.name}`,
-        html: `
-            <h2>📩 Novo Feedback</h2>
-            <p><strong>Usuário:</strong> ${usuarioLogado.name}</p>
-            <p><strong>Email:</strong> ${usuarioLogado.emails}</p>
-            <p><strong>Mensagem:</strong></p>
-            <blockquote style="border-left: 3px solid #ccc; padding-left: 12px; color: #555;">
-                ${mensagem}
-            </blockquote>
-        `,
-        text: `Feedback de ${usuarioLogado.name} (${usuarioLogado.emails}):\n\n${mensagem}`,
-    })
-    .then(() => {
-        console.log(`✅ Feedback de "${usuarioLogado.name}" enviado.`);
-        res.json({ ok: true });
-    })
-    .catch(err => {
-        console.error('❌ Erro ao enviar email:', err);
-        res.json({ ok: false, erro: 'Falha ao enviar email.' });
+    const envios = listaEmails.map(emailDestinatario => {
+        return transport.sendMail({
+            from: 'Lulaticos <lulaticospedagogia@gmail.com>',
+            to: emailDestinatario,
+            subject: 'Novo aviso pendente!',
+            html: '<h1>Olá ' + db.listaEmails.find(u => u.emails === emailDestinatario)?.name + '!</h1> <p style="font-weight: 300;">um novo aviso foi adicionado na agenda, para mais informações, acesse o sistema.</p>',
+            text: 'avisos',
+        })
+        .then(() => console.log('Email enviado para', emailDestinatario))
+        .catch(err => console.error('Erro ao enviar para', emailDestinatario, err));
     });
+ 
+    Promise.all(envios).then(() => res.json({ ok: true }));
 });
  
 app.listen(3000, () => {
     console.log('Servidor rodando em http://localhost:3000');
 });
+ 
