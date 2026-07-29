@@ -13,6 +13,3 @@ const dadosfilepath = path.join(dirname, 'dados.json'); //ele conecta os caminho
 
 app.use(express.json());//pra conseguir ver os dados na tela?
 app.use(express.static('public'));//ele consegue manipular os dados publicos dentro de qualquer area do projeto
-app.listen(PORT, ()=>{
-    console.log('servidor rodando em http://localhost:${PORT}')
-})
