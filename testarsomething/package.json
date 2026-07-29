@@ -1,0 +1,9 @@
+{
+    "name": "bancotestes",
+    "version": "1.0.0",
+    "main": "database.js",
+    "type": "module",
+    "dependencies": {
+        "express": "^5.2.1"
+    }
+}
