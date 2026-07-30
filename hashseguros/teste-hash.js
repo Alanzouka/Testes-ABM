@@ -14,7 +14,7 @@ async function testarHash() {
     const resultado1 = await bcrypt.compare(senhaDigitadaCorreta, hash);
     const reseltado2 = await bcrypt.compare(senhaDigitadaErrada, hash);
 
-    console.log("Tá cero isso aí?", resultado1);
+    console.log("Tá certo isso aí?", resultado1);
     console.log("Tá errado não tá?", reseltado2);
 }
 
