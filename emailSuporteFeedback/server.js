@@ -9,7 +9,7 @@ app.use(express.static(path.join(__dirname)));
 const transport = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'suportelulaticos@gmail.com',   // esse projeto é do suporte, então autentica com ele
+        user: 'lulaticospedagogia@gmail.com',   // esse projeto é do suporte, então autentica com ele
         pass: 'dnwofjipjgkzmini',             // gera uma senha de app pra essa conta também
     }
 });
@@ -22,8 +22,8 @@ app.post('/enviar-feedback', (req, res) => {
     }
 
     transport.sendMail({
-        from: 'Lulaticos Suporte <suportelulaticos@gmail.com>',
-        to: 'suportelulaticos@gmail.com',
+        from: 'Lulaticos Suporte <lulaticospedagogia@gmail.com>',
+        to: 'lulaticospedagogia@gmail.com',
         subject: 'Novo feedback recebido',
         html: `<h1>Novo feedback</h1>
                <p><strong>De:</strong> ${emailUsuario || 'anônimo'}</p>
