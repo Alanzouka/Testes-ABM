@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style2.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=MuseoModerno:ital,wght@0,100..900;1,100..900&display=swap"
@@ -25,22 +25,25 @@
     </div>
 
     <div class="infos-tela-de-cima">
-        <h1 class="FeedBack"><i class="bi bi-arrow-left-circle icone-voltar"></i>FeedBack</h1>
-        <h1 class="BemVindo">Bem-Vindo(a)!</h1>
-        <p class="textinho">Nossa área de feedbacks atua de forma imparcial e independente, analisando cada caso com
-            cuidado, respeito e compromisso real com a melhoria contínua.</p>
+        <h1 class="FeedBack">
+            <a href="feedback1.html" class="link-voltar">
+                <i class="bi bi-arrow-left-circle icone-voltar"></i>Voltar
+            </a>
+        </h1>
+        <h1 class="BemVindo">AVISO!</h1>
+        <p class="textinho">Comentários indecentes, desrespeitosos ou que violem direitos humanos não serão tolerados.
+            Respeite as diretrizes da plataforma. Esta é uma área séria e deve ser usada com responsabilidade.</p>
     </div>
 
     <div class="infos-tela-de-baixo">
-        <div class="textinho2">insira um e-mail de contato</div>
-
-        <form class="formulario-container" id="formEmail">
-            <input type="email" id="email" class="campo-email" placeholder="seuemail@exemplo.com" required>
-            <button type="submit" class="botao-enviar">Continuar</button>
+        <form class="formulario-container" id="formFeedback">
+            <textarea id="texto" class="campo-email" placeholder="Digite sua mensagem..." required></textarea>
+            <button type="submit" class="botao-enviar">Enviar</button>
         </form>
+        <div id="resultadoFeedback"></div>
     </div>
 
-    <script src="feedback1.js"></script>
+    <script src="feedback2.js"></script>
 
 </body>
 
