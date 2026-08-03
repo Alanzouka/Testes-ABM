@@ -1,12 +1,13 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 app.use(express.json());
 
+const SEGREDO = "nossa_chave_super_hiper_mega_secreta";
 
 const usuarios = [];
-
 
 app.post('/cadastro', async(req, res) => {
     const {nome, email, senha} = req.body;
@@ -21,10 +22,8 @@ app.post('/cadastro', async(req, res) => {
     }
 
     const hashSenha = await bcrypt.hash(senha, 10);
-
     usuarios.push({nome, email, senha: hashSenha});
 
-    console.log("Usuários cadastrados até agora:", usuarios);
 
     res.status(201).json({mensagem: "Uhuu criou com sucesso"});
 });
@@ -42,8 +41,23 @@ app.post('/login', async(req, res) => {
         return res.status(401).json({erro: "Tem treco errado aí"});
     }
 
-    res.json({mensagem: "O login deu certo viado", nome: usuario.nome, email: usuario.email});
+    const token = jwt.sign({email: usuario.email, nome: usuario.nome}, SEGREDO, {expiresIn: '2h'});
+    res.json({
+        mensagem: "Deu certo",
+        nome: usuario.nome,
+        email: usuario.email,
+        token: token
+    });
 });
+
+app.get('/perfil', verificarToken,(req, res) =>{
+    res.json({
+        mensagem: "Acesso liberado",
+        usuario: req.usuario
+
+    });
+});
+
 
 const PORTA = 3002;
 app.listen(PORTA, () => {
