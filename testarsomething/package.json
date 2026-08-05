@@ -2,8 +2,14 @@
     "name": "bancotestes",
     "version": "1.0.0",
     "main": "database.js",
-    "type": "module",
     "dependencies": {
         "express": "^5.2.1"
-    }
+    },
+    "description": "",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
 }
