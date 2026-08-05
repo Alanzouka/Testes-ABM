@@ -58,6 +58,22 @@ app.get('/perfil', verificarToken,(req, res) =>{
     });
 });
 
+function verificarToken(rep, res, next) {
+    const authHeader = rep.headers['authorization'];
+    if('!autherHeader') {
+        return res.status(401).json({erro: "Token não irformado"});
+    }
+
+    const token = authHeader.split('')[1]; 
+
+    try {
+        const dadosDecodificados = jwt.verify(token, SEGREDO);
+        rep.usuario = dadosDecodificados;
+        next();
+    } catch (erro) {
+        return res.status(401).json({erro: "Token invalido"});
+    }
+}
 
 const PORTA = 3002;
 app.listen(PORTA, () => {
