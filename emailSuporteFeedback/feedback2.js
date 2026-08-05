@@ -7,6 +7,9 @@ formFeedback.addEventListener('submit', function (event) {
     const texto = document.getElementById('texto').value.trim();
     const emailUsuario = sessionStorage.getItem('emailFeedback') || '';
 
+    // Seleciona o botão de submit do formulário
+    const btnSubmit = formFeedback.querySelector('button[type="submit"]') || formFeedback.querySelector('input[type="submit"]');
+
     if (texto === '') {
         alert('Escreva algo antes de enviar!');
         return;
@@ -17,6 +20,17 @@ formFeedback.addEventListener('submit', function (event) {
         return;
     }
 
+    // 🔒 1. DESABILITA O BOTÃO E CAMBIA O TEXTO
+    if (btnSubmit) {
+        btnSubmit.disabled = true;
+        btnSubmit.dataset.originalText = btnSubmit.innerText || btnSubmit.value;
+        if (btnSubmit.tagName === 'INPUT') {
+            btnSubmit.value = 'Enviando...';
+        } else {
+            btnSubmit.innerText = 'Enviando...';
+        }
+    }
+
     fetch('/enviar-feedback', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -25,7 +39,7 @@ formFeedback.addEventListener('submit', function (event) {
         .then(res => res.json())
         .then(data => {
             if (data.ok) {
-                resultadoDiv.innerText = 'Feedback enviado com suceeso.';
+                resultadoDiv.innerText = 'Feedback enviado com sucesso.';
                 sessionStorage.removeItem('emailFeedback');
                 formFeedback.reset();
             } else {
@@ -35,5 +49,16 @@ formFeedback.addEventListener('submit', function (event) {
         .catch(err => {
             console.error('Erro ao enviar feedback:', err);
             resultadoDiv.innerText = 'Erro ao enviar feedback, tente novamente.';
+        })
+        .finally(() => {
+            // 🔓 2. REATIVA O BOTÃO INDEPENDENTE DE TER ERRO OU SUCESSO
+            if (btnSubmit) {
+                btnSubmit.disabled = false;
+                if (btnSubmit.tagName === 'INPUT') {
+                    btnSubmit.value = btnSubmit.dataset.originalText;
+                } else {
+                    btnSubmit.innerText = btnSubmit.dataset.originalText;
+                }
+            }
         });
 });

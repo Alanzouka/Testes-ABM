@@ -10,14 +10,14 @@ const transport = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'lulaticospedagogia@gmail.com',   // esse projeto é do suporte, então autentica com ele
-        pass: 'dnwofjipjgkzmini',             // gera uma senha de app pra essa conta também
+        pass: 'dnwofjipjgkzmini',             // senha que criamos no password do google.
     }
 });
 
 app.post('/enviar-feedback', (req, res) => {
     const { texto, emailUsuario } = req.body;
 
-    if (!texto || texto.trim().length < 10) {
+    if (!texto || texto.trim().length < 5) {
         return res.status(400).json({ ok: false, erro: 'Feedback muito curto.' });
     }
 
