@@ -18,12 +18,11 @@ app.post('/cadastro', async(req, res) => {
 
     const jaExiste = usuarios.find(u => u.email === email);
     if(jaExiste){
-        return res.status(409).json({erro: "Já tem essa porra cadastrada"});
+        return res.status(409).json({erro: "Já tem essa cadastrada"});
     }
 
     const hashSenha = await bcrypt.hash(senha, 10);
     usuarios.push({nome, email, senha: hashSenha});
-
 
     res.status(201).json({mensagem: "Uhuu criou com sucesso"});
 });
@@ -50,27 +49,29 @@ app.post('/login', async(req, res) => {
     });
 });
 
-app.get('/perfil', verificarToken,(req, res) =>{
+app.get('/perfil', verificarToken, (req, res) =>{
     res.json({
         mensagem: "Acesso liberado",
         usuario: req.usuario
-
     });
 });
 
-function verificarToken(rep, res, next) {
-    const authHeader = rep.headers['authorization'];
-    if('!autherHeader') {
-        return res.status(401).json({erro: "Token não irformado"});
+function verificarToken(req, res, next) {
+    console.log("header recebido:", req.headers);
+
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+        return res.status(401).json({erro: "Token não informado"});
     }
 
-    const token = authHeader.split('')[1]; 
+    const token = authHeader.split(' ')[1]; 
 
     try {
         const dadosDecodificados = jwt.verify(token, SEGREDO);
-        rep.usuario = dadosDecodificados;
+        req.usuario = dadosDecodificados;
         next();
     } catch (erro) {
+        console.log("motivo dessa bosta tá dando errado:", erro.message);
         return res.status(401).json({erro: "Token invalido"});
     }
 }
