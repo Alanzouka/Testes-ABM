@@ -4,7 +4,7 @@ document.getElementById('form-login').addEventListener('submit', async function 
     const email = document.getElementById('email').value;
     const senha = document.getElementById('senha').value;
 
-    const resposta = await fetch('/login', {
+    const resposta = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, senha })
@@ -14,7 +14,6 @@ document.getElementById('form-login').addEventListener('submit', async function 
 
     if (resultado.token) {
         alert(resultado.mensagem);
-        // depois: guardar o token e redirecionar para outra página
     } else {
         alert(resultado.erro);
     }

@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const usuarios = require("./database");
 
 const SEGREDO = "nossa_chave_super_hiper_mega_secreta";
+const EMAIL_PEDAGOGIA = "lulaticospedagogia@gmail.com";
 
 async function login(email, senha) {
     const usuario = usuarios.find(u => u.email === email);
@@ -19,9 +20,20 @@ async function login(email, senha) {
         return { erro: "conta ainda nao validada." };
     }
 
-    const token = jwt.sign({ nome: usuario.nome, email: usuario.email }, SEGREDO, { expiresIn: '2h' });
+    // ⬇️ decide o perfil comparando o email
+    const perfil = (usuario.email === EMAIL_PEDAGOGIA) ? "pedagogia" : "responsavel";
 
-    return { mensagem: "login realizado com sucesso!", token: token };
+    const token = jwt.sign(
+        { nome: usuario.nome, email: usuario.email, perfil: perfil },
+        SEGREDO,
+        { expiresIn: '2h' }
+    );
+
+    return {
+        mensagem: "login realizado com sucesso!",
+        token: token,
+        perfil: perfil   // ⬅️ o front usa isso pra decidir a tela
+    };
 }
 
 module.exports = login;
