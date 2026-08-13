@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt');
-const usuarios = require("./database");
+const usuarios = require("../database");
+
+const EMAIL_PEDAGOGIA = "lulaticospedagogia@gmail.com";
 
 async function cadastrar(nome, email, senha, confirmarsenha) {
     if (!nome || !email || !senha || !confirmarsenha) {
@@ -15,10 +17,13 @@ async function cadastrar(nome, email, senha, confirmarsenha) {
 
     const senhaCriptografada = await bcrypt.hash(senha, 10);
 
+    const role = (email === EMAIL_PEDAGOGIA) ? "pedagogia" : "responsavel";
+
     usuarios.push({
         nome,
         email,
         senha: senhaCriptografada,
+        role,          
         validado: false
     });
 
