@@ -20,7 +20,7 @@ formFeedback.addEventListener('submit', function (event) {
         return;
     }
 
-    // 🔒 1. DESABILITA O BOTÃO E CAMBIA O TEXTO
+    
     if (btnSubmit) {
         btnSubmit.disabled = true;
         btnSubmit.dataset.originalText = btnSubmit.innerText || btnSubmit.value;
