@@ -3,13 +3,14 @@ const path = require("path");
 const cadastrar = require("./services/cadastro");
 const validar = require("./services/validacao");
 const login = require("./services/login");
+const { publicarAviso, listarAvisos } = require("./services/avisos");
 const permitirApenas = require("./middlewares/permitirApenas");
 
 const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-// ===== ROTAS PÚBLICAS (não precisam de token) =====
+// ===== ROTAS PÚBLICAS =====
 
 app.post("/api/cadastro", async (req, res) => {
     const { nome, email, senha, confirmarsenha } = req.body;
@@ -28,12 +29,14 @@ app.post("/api/login", async (req, res) => {
 
 // ===== ROTAS PROTEGIDAS =====
 
-app.get("/api/pedagogia/avisos", permitirApenas("pedagogia"), (req, res) => {
-    res.json({ mensagem: "acesso liberado para pedagogia!" });
+app.post("/api/pedagogia/avisos", permitirApenas("pedagogia"), async (req, res) => {
+    const { texto, data } = req.body;
+    const resultado = await publicarAviso(texto, data);
+    res.status(resultado.status).json(resultado.corpo);
 });
 
 app.get("/api/pais/agenda", permitirApenas("responsavel", "pedagogia"), (req, res) => {
-    res.json({ mensagem: "acesso liberado para responsavel ou pedagogia!" });
+    res.json({ avisos: listarAvisos() });
 });
 
 app.listen(3000, () => {

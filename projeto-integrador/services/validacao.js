@@ -1,4 +1,4 @@
-const usuarios = require("../database");
+const { usuarios } = require("../database");
 
 function validar(nome) {
     const usuario = usuarios.find(u => u.nome === nome);

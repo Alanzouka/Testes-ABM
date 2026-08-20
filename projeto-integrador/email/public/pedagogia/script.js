@@ -48,10 +48,8 @@ verificarAcesso();
 
 // ===== 4. Botão "Adicionar novo aviso" =====
 document.querySelector('.novo-aviso').addEventListener('click', function () {
-    // por enquanto só um alerta — depois vira um formulário/modal de verdade
-    alert('Abrir formulário de novo aviso (funcionalidade a implementar).');
+    window.location.href = './novo-aviso.html';
 });
-
 // ===== 5. Logout (se tiverem um botão de sair) =====
 function logout() {
     localStorage.removeItem('token');

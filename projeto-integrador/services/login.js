@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const usuarios = require("../database");
+const { usuarios } = require("../database");
 
 const SEGREDO = "nossa_chave_super_hiper_mega_secreta";
 
@@ -28,7 +28,7 @@ async function login(email, senha) {
     return {
         mensagem: "login realizado com sucesso!",
         token: token,
-        role: usuario.role 
+        role: usuario.role
     };
 }
 
