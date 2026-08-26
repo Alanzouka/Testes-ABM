@@ -18,6 +18,7 @@ async function publicarAviso(texto, data) {
 
     avisos.push({ texto, data, criadoEm: new Date() });
 
+    // busca dinamicamente quem é responsável e já está validado
     const responsaveis = usuarios.filter(u => u.role === "responsavel" && u.validado === true);
 
     const envios = responsaveis.map(usuario => {

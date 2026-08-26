@@ -1,23 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const btnEditar = document.getElementById('btn-editar');
-    const btnDeletar = document.getElementById('btn-deletar');
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Você precisa fazer login primeiro.');
+        window.location.href = '../login/login.html';
+        return;
+    }
+
     const btnConfirmar = document.getElementById('btn-confirmar');
+    const btnDeletar = document.getElementById('btn-deletar');
     const inputData = document.getElementById('data-aviso');
     const textareaConteudo = document.getElementById('texto-aviso');
 
-    btnEditar.addEventListener('click', () => {
-        inputData.removeAttribute('disabled');
-        textareaConteudo.removeAttribute('disabled');
-        textareaConteudo.focus();
-        alert("Modo de edição ativado! Faça suas alterações.");
-    });
-
     btnDeletar.addEventListener('click', () => {
-        if (confirm("Tem certeza que deseja excluir o conteúdo deste aviso?")) {
+        if (confirm("Tem certeza que deseja limpar o conteúdo deste aviso?")) {
             inputData.value = '';
             textareaConteudo.value = '';
-            inputData.setAttribute('disabled', 'true');
-            textareaConteudo.setAttribute('disabled', 'true');
         }
     });
 
@@ -30,23 +27,24 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        inputData.setAttribute('disabled', 'true');
-        textareaConteudo.setAttribute('disabled', 'true');
-
         btnConfirmar.disabled = true;
         btnConfirmar.innerText = 'Enviando...';
 
-        fetch('/publicar-aviso', {
+        fetch('/api/pedagogia/avisos', {   // ⬅️ ESSA É A LINHA QUE PRECISA MUDAR
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
             body: JSON.stringify({ texto, data })
         })
         .then(res => res.json())
         .then(resposta => {
             if (resposta.ok) {
                 alert("Aviso salvo e e-mails enviados com sucesso!");
+                window.location.href = './pedagogia.html';
             } else {
-                alert("Aviso salvo, mas houve um problema ao enviar os e-mails.");
+                alert(resposta.erro || "Aviso salvo, mas houve um problema ao enviar os e-mails.");
             }
         })
         .catch(err => {
