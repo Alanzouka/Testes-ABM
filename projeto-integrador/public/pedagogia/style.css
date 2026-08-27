@@ -123,3 +123,13 @@ body {
     gap: 10px;
     margin-bottom: 15px;
 }
+
+input[type="button"] {
+    background-color: #608EC9;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 100%;
+}

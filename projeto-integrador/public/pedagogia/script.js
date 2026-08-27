@@ -16,14 +16,12 @@ function pegarDadosDoToken(token) {
 const usuario = pegarDadosDoToken(token);
 document.getElementById('nome-usuario').textContent = usuario.nome;
 
-// ===== 3. Confirma acesso com o backend (rota exclusiva da pedagogia) =====
-async function verificarAcesso() {
+// ===== 3. Busca os avisos reais e desenha os cards na tela =====
+async function carregarAvisos() {
     try {
-        const resposta = await fetch('/api/pedagogia/avisos', {
+        const resposta = await fetch('/api/pais/agenda', {
             method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }
+            headers: { 'Authorization': 'Bearer ' + token }
         });
 
         if (resposta.status === 401 || resposta.status === 403) {
@@ -35,22 +33,45 @@ async function verificarAcesso() {
             return;
         }
 
-        // acesso liberado — quem chegou até aqui é da pedagogia
         const dados = await resposta.json();
-        console.log(dados);
+        desenharCards(dados.avisos);
 
     } catch (erro) {
-        console.error('Erro ao verificar acesso:', erro);
+        console.error('Erro ao carregar avisos:', erro);
     }
 }
 
-verificarAcesso();
+function desenharCards(avisos) {
+    const container = document.querySelector('.lista-cards');
+    container.innerHTML = ''; // limpa os cards fixos que estavam no HTML
 
-// ===== 4. Botão "Adicionar novo aviso" =====
-document.querySelector('.novo-aviso').addEventListener('click', function () {
-    window.location.href = './novo-aviso.html';
-});
-// ===== 5. Logout (se tiverem um botão de sair) =====
+    if (avisos.length === 0) {
+        container.innerHTML = '<p>Nenhum aviso publicado ainda.</p>';
+        return;
+    }
+
+    avisos.forEach((aviso, index) => {
+        const cor = index % 2 === 0 ? 'escuro' : 'claro';
+
+        const card = document.createElement('div');
+        card.className = `card-aviso ${cor}`;
+        card.innerHTML = `
+            <h2 class="data">${aviso.data || 'sem data'}</h2>
+            <p class="descricao">${aviso.texto}</p>
+            <details>
+                <summary>ler mais</summary>
+                <p>${aviso.texto}</p>
+                <input type="button" value="Editar Aviso!" class="btn btn-primary"
+                    onclick="window.location.href='editar-aviso.html?id=${aviso.id}'">
+            </details>
+        `;
+        container.appendChild(card);
+    });
+}
+
+carregarAvisos();
+
+// ===== 4. Logout =====
 function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
