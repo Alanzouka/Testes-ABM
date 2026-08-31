@@ -66,3 +66,22 @@ app.get("/api/pais/agenda", permitirApenas("responsavel", "pedagogia"), (req, re
 app.listen(3000, () => {
     console.log("servidor rodando em http://localhost:3000");
 });
+
+app.put('/api/avisos/:id', (req, res) => {
+    const { id } = req.params;
+    const { titulo, descricao, dataEvento } = req.body;
+
+    // 1. Validar se os campos obrigatórios estão preenchidos
+    if (!titulo || !descricao || !dataEvento) {
+        return res.status(400).json({ mensagem: 'Título, descrição e data são obrigatórios.' });
+    }
+
+    // 2. Lógica para atualizar no Banco de Dados (exemplo conceitual):
+    // const avisoAtualizado = await BancoDeDados.atualizarAviso(id, { titulo, descricao, dataEvento });
+    
+    // Se o aviso for encontrado e atualizado com sucesso:
+    return res.status(200).json({ 
+        mensagem: 'Aviso atualizado com sucesso!',
+        // aviso: avisoAtualizado 
+    });
+});

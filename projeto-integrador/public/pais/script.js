@@ -1,4 +1,3 @@
-// ===== 1. Verifica se existe um token guardado =====
 const token = localStorage.getItem('token');
 
 if (!token) {
@@ -6,25 +5,19 @@ if (!token) {
     window.location.href = '../login/login.html';
 }
 
-// ===== 2. Pega o nome do usuário direto do token (sem precisar de outra requisição) =====
 function pegarDadosDoToken(token) {
-    // um token JWT tem 3 partes separadas por ponto: cabecalho.dados.assinatura
     const partes = token.split('.');
-    const dados = JSON.parse(atob(partes[1])); // decodifica a parte do meio (payload)
-    return dados;
+    return JSON.parse(atob(partes[1]));
 }
 
 const usuario = pegarDadosDoToken(token);
-document.getElementById('nome-usuario').textContent = usuario.nome;
+const elementoNome = document.getElementById('nome-usuario');
+if (elementoNome) elementoNome.textContent = usuario.nome;
 
-// ===== 3. Confirma acesso com o backend (rota protegida) =====
-async function verificarAcesso() {
+async function carregarAvisos() {
     try {
         const resposta = await fetch('/api/pais/agenda', {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }
+            headers: { 'Authorization': 'Bearer ' + token }
         });
 
         if (resposta.status === 401 || resposta.status === 403) {
@@ -33,12 +26,45 @@ async function verificarAcesso() {
             localStorage.removeItem('token');
             localStorage.removeItem('role');
             window.location.href = '../login/login.html';
+            return;
         }
-        // se passou, a pessoa está autorizada — os avisos mockados já estão no HTML
 
+        const dados = await resposta.json();
+        desenharCards(dados.avisos);
     } catch (erro) {
-        console.error('Erro ao verificar acesso:', erro);
+        console.error('Erro ao carregar avisos:', erro);
     }
 }
 
-verificarAcesso();
+function desenharCards(avisos) {
+    const container = document.querySelector('.lista-cards');
+    container.innerHTML = '';
+
+    if (avisos.length === 0) {
+        container.innerHTML = '<p style="text-align:center;">Nenhum aviso publicado ainda.</p>';
+        return;
+    }
+
+    avisos.forEach((aviso, index) => {
+        const cor = index % 2 === 0 ? 'escuro' : 'claro';
+        const card = document.createElement('div');
+        card.className = `card-aviso ${cor}`;
+        card.innerHTML = `
+            <h2 class="data">${aviso.data || 'sem data'}</h2>
+            <p class="descricao">${aviso.texto}</p>
+            <details>
+                <summary>ler mais</summary>
+                <p>${aviso.texto}</p>
+            </details>
+        `;
+        container.appendChild(card);
+    });
+}
+
+carregarAvisos();
+
+function logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    window.location.href = '../login/login.html';
+}
