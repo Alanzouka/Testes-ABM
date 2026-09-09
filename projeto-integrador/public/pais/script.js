@@ -45,18 +45,33 @@ function desenharCards(avisos) {
         return;
     }
 
+    const LIMITE_CARACTERES = 100;
+
     avisos.forEach((aviso, index) => {
         const cor = index % 2 === 0 ? 'escuro' : 'claro';
+        const texto = aviso.texto;
+        const textoEhLongo = texto.length > LIMITE_CARACTERES;
+
         const card = document.createElement('div');
         card.className = `card-aviso ${cor}`;
-        card.innerHTML = `
-            <h2 class="data">${aviso.data || 'sem data'}</h2>
-            <p class="descricao">${aviso.texto}</p>
-            <details>
-                <summary>ler mais</summary>
-                <p>${aviso.texto}</p>
-            </details>
-        `;
+
+        if (textoEhLongo) {
+            const resumo = texto.substring(0, LIMITE_CARACTERES).trim() + '...';
+            card.innerHTML = `
+                <h2 class="data">${aviso.data || 'sem data'}</h2>
+                <p class="descricao">${resumo}</p>
+                <details>
+                    <summary>ler mais</summary>
+                    <p>${texto}</p>
+                </details>
+            `;
+        } else {
+            card.innerHTML = `
+                <h2 class="data">${aviso.data || 'sem data'}</h2>
+                <p class="descricao">${texto}</p>
+            `;
+        }
+
         container.appendChild(card);
     });
 }
