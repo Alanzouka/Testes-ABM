@@ -7,7 +7,6 @@ formFeedback.addEventListener('submit', function (event) {
     const texto = document.getElementById('texto').value.trim();
     const emailUsuario = sessionStorage.getItem('emailFeedback') || '';
 
-    // Seleciona o botão de submit do formulário
     const btnSubmit = formFeedback.querySelector('button[type="submit"]') || formFeedback.querySelector('input[type="submit"]');
 
     if (texto === '') {
@@ -20,7 +19,6 @@ formFeedback.addEventListener('submit', function (event) {
         return;
     }
 
-    
     if (btnSubmit) {
         btnSubmit.disabled = true;
         btnSubmit.dataset.originalText = btnSubmit.innerText || btnSubmit.value;
@@ -31,7 +29,7 @@ formFeedback.addEventListener('submit', function (event) {
         }
     }
 
-    fetch('/enviar-feedback', {
+    fetch('/api/feedback', {   // ⬅️ ÚNICA LINHA QUE MUDOU (antes era '/enviar-feedback')
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ texto, emailUsuario })
@@ -51,7 +49,6 @@ formFeedback.addEventListener('submit', function (event) {
             resultadoDiv.innerText = 'Erro ao enviar feedback, tente novamente.';
         })
         .finally(() => {
-            // 🔓 2. REATIVA O BOTÃO INDEPENDENTE DE TER ERRO OU SUCESSO
             if (btnSubmit) {
                 btnSubmit.disabled = false;
                 if (btnSubmit.tagName === 'INPUT') {
